@@ -6,6 +6,7 @@ class Template
     private $file;
     /** @var array テンプレートで表示するための変数を保持した配列 */
     private $params;
+
     public function __construct($file, array $params)
     {
         $this->file = $file;
@@ -17,7 +18,7 @@ class Template
         extract($this->params);
         include $this->file;
     }
-    
+
     public function __toString()
     {
         ob_start();
