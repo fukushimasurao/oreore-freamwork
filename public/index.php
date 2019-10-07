@@ -5,18 +5,15 @@ $routes = require __DIR__ .'/../app/routes.php';
 
 $request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-if(isset($routes[$_SERVER['REQUEST_URI']])){
-    $f=$routes[$_SERVER['REQUEST_URI']];
-    $f();
-}else{
-    http_response_code(response_code404);
-    echo "<h1>404</h1>";
+$not_found = function (){
+    return [404, ['Contentd-Type' => 'text/html'],"<h1>404NotFound</h1>"];
+};
+
+$f = $routes[$request_uri] ?? $not_found;
+[$status, $headers, $body] = $f();
+http_response_code($status);
+foreach($headers as $name => $h){
+    header("{name}:$h");
 }
+echo $body;
 
-
-// if($_SERVER['REQUEST_URI'] ==='/phpinfo.php'){
-//     phpinfo();
-//     exit;
-// }
-// http_response_code(response_code404);
-// echo "<h1>404</h1>";
