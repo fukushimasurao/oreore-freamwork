@@ -2,11 +2,12 @@
 
 $routes = [];
 
-$routes['/'] = function(){
-    ob_start();
-   include __DIR__ . '/view/index.phtml';
-   return [200, ['Content-Type' => 'test/html'] , ob_get_clean()];
+$template = new \Oira\TemplateFactory(__DIR__ . '/view/');
 
+$routes['/'] = function () use ($template) {
+    return [200, ['Content-Type' => 'text/html'], $template->create('index', [
+        'name' => 'てすとまん'
+    ])];
 };
 
 $routes['/phpinfo.php'] = function(){
